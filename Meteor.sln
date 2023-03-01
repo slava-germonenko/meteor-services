@@ -3,9 +3,29 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.4.33403.182
 MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{4D7526B0-521E-42CE-A79C-6A876657445D}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Employees", "Employees", "{884776EC-9113-4833-923F-95BC570D5B03}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Meteor.Employees.Api", "src\Employees\Meteor.Employees.Api\Meteor.Employees.Api.csproj", "{539C0795-C6D8-403C-BC4A-CBDFA953FA4E}"
+EndProject
 Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{539C0795-C6D8-403C-BC4A-CBDFA953FA4E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{539C0795-C6D8-403C-BC4A-CBDFA953FA4E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{539C0795-C6D8-403C-BC4A-CBDFA953FA4E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{539C0795-C6D8-403C-BC4A-CBDFA953FA4E}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{884776EC-9113-4833-923F-95BC570D5B03} = {4D7526B0-521E-42CE-A79C-6A876657445D}
+		{539C0795-C6D8-403C-BC4A-CBDFA953FA4E} = {884776EC-9113-4833-923F-95BC570D5B03}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {F82EDB38-6FD3-4208-B9EF-775B5CD72414}
