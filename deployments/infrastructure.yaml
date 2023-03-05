@@ -1,0 +1,28 @@
+﻿version: "3.9"
+
+services:
+  search:
+    image: "getmeili/meilisearch"
+    container_name: "meteor__search"
+    hostname: "search"
+    volumes:
+      - "meteor__search__volume/data:/meili_data"
+    ports:
+      - "7700:7700"
+    environment:
+      MEILI_MASTER_KEY: "local_MEILI_KEY+123!"
+  postgres:
+    image: "postgres:15-alpine"
+    container_name: "meteor__postgres"
+    environment:
+      POSTGRES_USER: "admin"
+      POSTGRES_PASSWORD: "core+ADMIN!123"
+      POSTGRES_DB: "primary"
+    volumes:
+      - meteor__postgres__volume/data:/var/lib/postgresql/data
+    
+volumes:
+  meteor__search__volume:
+    external: true
+  meteor__postgres__volume:
+    external: true
