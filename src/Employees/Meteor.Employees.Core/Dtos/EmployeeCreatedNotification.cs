@@ -1,7 +1,11 @@
-﻿namespace Meteor.Employees.Core.Dtos;
+﻿using Meteor.Employees.Core.Models;
 
-public record CreateEmployeeDto
+namespace Meteor.Employees.Core.Dtos;
+
+public record EmployeeCreatedNotification
 {
+    public int UserId { get; set; }
+    
     public string FirstName { get; set; } = string.Empty;
 
     public string LastName { get; set; } = string.Empty;
@@ -12,7 +16,5 @@ public record CreateEmployeeDto
 
     public string PhoneNumber { get; set; } = string.Empty;
 
-    public string Password { get; set; } = string.Empty;
-
-    public List<SetCustomFieldDto> CustomFields { get; set; } = new();
+    public List<EmployeeField> CustomFields { get; set; } = new();
 }

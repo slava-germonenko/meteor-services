@@ -2,5 +2,5 @@
 
 public interface IPublisher<TData>
 {
-    public void Publish(TData body, IEnumerable<KeyValuePair<string, string>>? metadata = null);
+    public void Publish(TData body);
 }

@@ -12,13 +12,10 @@ public static class ValidationHelper
         string errorMessage = "Model is invalid."
     )
     {
-        var validationErrors = new List<ValidationError>();
+        var validationErrors = new LinkedList<ValidationError>();
         foreach (var validator in validators)
         {
-            if (await validator.TryValidateAsync(model, out var errors))
-            {
-                validationErrors.AddRange(errors);
-            }
+            await validator.TryValidateAsync(model, validationErrors);
         }
 
         if (validationErrors.Any())

@@ -2,12 +2,13 @@
 using Meteor.Common.Messaging.RabbitMq.Options;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
+using RabbitMQ.Client;
 
 namespace Meteor.Common.Messaging.RabbitMq.Extensions;
 
 public static class ServiceCollectionExtensions
 {
-    public static void RegisterPublisher<TMessage>(
+    public static void AddPublisher<TMessage>(
         this IServiceCollection services,
         Action<PublisherOptions<TMessage>> configure,
         ServiceLifetime publisherLifetime = ServiceLifetime.Scoped,
@@ -25,15 +26,26 @@ public static class ServiceCollectionExtensions
             optionsLifetime
         );
         services.TryAdd(optionsServiceDescriptor);
-        
+
         var publisherServiceDescriptor = new ServiceDescriptor(
             typeof(IPublisher<TMessage>),
             typeof(RabbitMqPublisher<TMessage>),
-            optionsLifetime
+            publisherLifetime
         );
         services.TryAdd(publisherServiceDescriptor);
     }
 
-    public static void AddChannelFactory(this IServiceCollection services)
-        => services.AddScoped<IChannelFactory, ChannelFactory>();
+    public static void AddChannelFactory(this IServiceCollection services, Action<ConnectionOptions> configure)
+    {
+        var options = new ConnectionOptions();
+        configure(options);
+        var connectionFactory = new ConnectionFactory
+        {
+            HostName = options.Host,
+            UserName = options.User,
+            Password = options.Password,
+        };
+        services.AddSingleton<IConnectionFactory>(connectionFactory);
+        services.AddScoped<IChannelFactory, ChannelFactory>();
+    }
 }

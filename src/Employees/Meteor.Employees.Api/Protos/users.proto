@@ -1,5 +1,0 @@
-syntax = "proto3";
-
-option csharp_namespace = "Meteor.Employees.Api.Grps";
-
-package users;

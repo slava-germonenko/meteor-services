@@ -15,28 +15,15 @@ public class RabbitMqPublisher<TMessage> : IDisposable, IPublisher<TMessage>
 
     private IModel Channel => _channel ??= _channelFactory.CreateChannel();
 
-    private bool _exchangeDeclared;
-
     public RabbitMqPublisher(IChannelFactory channelFactory, PublisherOptions<TMessage> publisherOptions)
     {
         _channelFactory = channelFactory;
         _publisherOptions = publisherOptions;
     }
 
-    public void Publish(TMessage body, IEnumerable<KeyValuePair<string, string>>? metadata = null)
+    public void Publish(TMessage body)
     {
-        if (!_exchangeDeclared)
-        {
-            DeclareExchange(Channel);
-        }
-        
         Channel.BasicPublish(_publisherOptions.ExchangeName, _publisherOptions.RoutingKey, body);
-    }
-
-    private void DeclareExchange(IModel channel)
-    {
-        channel.ExchangeDeclare(_publisherOptions);
-        _exchangeDeclared = true;
     }
 
     public void Dispose()

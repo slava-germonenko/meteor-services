@@ -10,7 +10,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Protobuf Include="Protos\users.proto" GrpcServices="Server" />
+    <Protobuf Include="Protos\employees.proto" GrpcServices="Server" ProtoRoot="Protos\" />
+    <Protobuf Include="Protos\custom_fields.proto" GrpcServices="Server" ProtoRoot="Protos\" />
   </ItemGroup>
 
   <ItemGroup>
@@ -26,8 +27,12 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\Common\Meteor.Common.Configuration\Meteor.Common.Configuration.csproj" />
+    <ProjectReference Include="..\..\Common\Meteor.Common.Grpc\Meteor.Common.Grpc.csproj" />
+    <ProjectReference Include="..\..\Common\Meteor.Common.Messaging.RabbitMq\Meteor.Common.Messaging.RabbitMq.csproj" />
     <ProjectReference Include="..\Meteor.Employees.Core\Meteor.Employees.Core.csproj" />
     <ProjectReference Include="..\Meteor.Employees.Infrastructure.Migrations\Meteor.Employees.Infrastructure.Migrations.csproj" />
+    <ProjectReference Include="..\Meteor.Employees.Infrastructure\Meteor.Employees.Infrastructure.csproj" />
   </ItemGroup>
 
 </Project>
