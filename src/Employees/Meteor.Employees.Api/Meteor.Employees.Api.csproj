@@ -1,0 +1,38 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net7.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <UserSecretsId>b0cf1e95-b7ce-4184-a7f5-d5be338e4b2f</UserSecretsId>
+    <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+    <DockerfileContext>..\..\..</DockerfileContext>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Protobuf Include="Protos\employees.proto" GrpcServices="Server" ProtoRoot="Protos\" />
+    <Protobuf Include="Protos\custom_fields.proto" GrpcServices="Server" ProtoRoot="Protos\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="EFCore.NamingConventions" Version="7.0.2" />
+    <PackageReference Include="Grpc.AspNetCore" Version="2.51.0" />
+    <PackageReference Include="Grpc.AspNetCore.Server.Reflection" Version="2.51.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="7.0.3">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.17.0" />
+    <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="7.0.3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\Common\Meteor.Common.Configuration\Meteor.Common.Configuration.csproj" />
+    <ProjectReference Include="..\..\Common\Meteor.Common.Grpc\Meteor.Common.Grpc.csproj" />
+    <ProjectReference Include="..\..\Common\Meteor.Common.Messaging.RabbitMq\Meteor.Common.Messaging.RabbitMq.csproj" />
+    <ProjectReference Include="..\Meteor.Employees.Core\Meteor.Employees.Core.csproj" />
+    <ProjectReference Include="..\Meteor.Employees.Infrastructure.Migrations\Meteor.Employees.Infrastructure.Migrations.csproj" />
+    <ProjectReference Include="..\Meteor.Employees.Infrastructure\Meteor.Employees.Infrastructure.csproj" />
+  </ItemGroup>
+
+</Project>

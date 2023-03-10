@@ -1,0 +1,48 @@
+syntax = "proto3";
+
+option csharp_namespace = "Meteor.Employees.Api.Grpc";
+
+package employees;
+
+import "custom_fields.proto";
+
+message SetCustomFieldDto {
+  int32 field_id = 1;
+  string value = 2;
+}
+
+enum EMPLOYEE_STATUS {
+  EMPLOYEE_STATUS_ACTIVE = 0;
+  EMPLOYEE_STATUS_INACTIVE = 1;
+  EMPLOYEE_STATUS_TERMINATED = 2;
+  EMPLOYEE_STATUS_ON_LEAVE = 3;
+}
+
+message CreateEmployeeRequest {
+  string email_address = 1;
+  string phone_number = 2;
+  reserved 3, 4, 5;
+  string first_name = 6;
+  string last_name = 7;
+  string middle_name = 8;
+  reserved 9, 10;
+  string password = 11;
+  reserved 12, 13, 14, 15;
+  repeated SetCustomFieldDto custom_fields = 16;
+}
+
+message EmployeeResponse {
+  int32 id = 1;
+  string email_address = 2;
+  string phone_number = 3;
+  reserved 4, 5;
+  string first_name = 6;
+  string last_name = 7;
+  string middle_name = 8;
+  EMPLOYEE_STATUS status = 9;
+  repeated custom_fields.CustomField custom_fields = 10;
+}
+
+service EmployeesService {
+  rpc CreateEmployee(CreateEmployeeRequest) returns (EmployeeResponse);
+}

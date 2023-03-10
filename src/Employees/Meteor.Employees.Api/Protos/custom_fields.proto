@@ -1,0 +1,13 @@
+﻿syntax = "proto3";
+
+option csharp_namespace = "Meteor.Employees.Api.Grpc";
+
+package custom_fields;
+
+message CustomField {
+  int32 id = 1;
+  string name = 2;
+  string value = 3;
+  bool required = 4;
+  bool unique = 5;
+}
