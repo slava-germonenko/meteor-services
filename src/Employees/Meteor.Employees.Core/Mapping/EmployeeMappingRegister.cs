@@ -4,17 +4,15 @@ using Meteor.Employees.Core.Models.Enums;
 
 namespace Meteor.Employees.Core.Mapping;
 
-public static class EmployeeMapping
+public class EmployeeMappingRegister : IRegister
 {
-    public static Lazy<TypeAdapterConfig> Configuration { get; } = new(GetConfiguration);
-
-    private static TypeAdapterConfig GetConfiguration()
+    public void Register(TypeAdapterConfig config)
     {
-        var config = new TypeAdapterConfig();
-        
         config.ForType<CreateEmployeeDto, Employee>()
             .Map(e => e.Status, _ => EmployeeStatus.Inactive);
-
-        return config;
+        
+        config.ForType<UpdateEmployeeDto, Employee>()
+            .IgnoreNullValues(true)
+            .Ignore(e => e.Status);
     }
 }

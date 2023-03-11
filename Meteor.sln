@@ -35,6 +35,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Meteor.Common.Configuration
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Meteor.Common.Grpc", "src\Common\Meteor.Common.Grpc\Meteor.Common.Grpc.csproj", "{6E8B0A57-D89A-43BF-8316-1B2B90FAE02D}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "deployments", "deployments", "{AE6CC0AE-E5B7-400A-9A30-E248F8224EF9}"
+	ProjectSection(SolutionItems) = preProject
+		deployments\infrastructure.yaml = deployments\infrastructure.yaml
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU

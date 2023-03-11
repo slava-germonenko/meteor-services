@@ -1,4 +1,3 @@
-using MapsterMapper;
 using Meteor.Common.Configuration.Extensions;
 using Meteor.Common.Core.Services.Abstractions;
 using Meteor.Common.Grpc.Interceptors;
@@ -8,7 +7,6 @@ using Meteor.Employees.Api.Services;
 using Meteor.Employees.Core;
 using Meteor.Employees.Core.Contracts;
 using Meteor.Employees.Core.Dtos;
-using Meteor.Employees.Core.Mapping;
 using Meteor.Employees.Core.Models;
 using Meteor.Employees.Core.Services;
 using Meteor.Employees.Core.Services.Abstractions;
@@ -20,6 +18,9 @@ using Microsoft.EntityFrameworkCore;
 var builder = WebApplication.CreateBuilder(args);
 builder.Configuration.AddEnvironmentVariables("METEOR_");
 
+builder.Services.Configure<PasswordsOptions>(builder.Configuration.GetSection("Security:Passwords"));
+
+builder.Services.AddMapper();
 builder.Services.AddGrpc(options =>
 {
     options.Interceptors.Add<ExceptionsLoggingInterceptor>();
@@ -40,28 +41,26 @@ builder.Services.AddChannelFactory(options =>
     options.Password = builder.Configuration.GetRequiredValue<string>("Messaging:Password");
 });
 
-builder.Services.AddPublisher<EmployeeCreatedNotification>(options =>
+builder.Services.AddPublisher<EmployeeNotification>(options =>
 {
     options.ExchangeName = builder.Configuration
-        .GetRequiredValue<string>("Messaging:Exchanges:EmployeeCreated:ExchangeName");
+        .GetRequiredValue<string>("Messaging:Exchanges:EmployeeChanged:ExchangeName");
     
     options.RoutingKey = builder.Configuration
-        .GetRequiredValue<string>("Messaging:Exchanges:EmployeeCreated:RoutingKey");
+        .GetRequiredValue<string>("Messaging:Exchanges:EmployeeChanged:RoutingKey");
 });
 
 builder.Services.AddPublisher<PasswordUpdatedNotification>(options =>
 {
     options.ExchangeName = builder.Configuration
-        .GetRequiredValue<string>("Messaging:Exchanges:EmployeeUpdatedPassword:ExchangeName");
+        .GetRequiredValue<string>("Messaging:Exchanges:EmployeeChangedPassword:ExchangeName");
     
     options.RoutingKey = builder.Configuration
-        .GetRequiredValue<string>("Messaging:Exchanges:EmployeeUpdatedPassword:RoutingKey");
+        .GetRequiredValue<string>("Messaging:Exchanges:EmployeeChangedPassword:RoutingKey");
 });
 
-builder.Services.AddSingleton<IMapper>(new Mapper(EmployeeMapping.Configuration.Value));
-
-builder.Services.Configure<PasswordsOptions>(builder.Configuration.GetSection("Security:Passwords"));
-builder.Services.AddScoped<EmployeeSetupService>();
+builder.Services.AddScoped<IEmployeeSetupService, EmployeeSetupService>();
+builder.Services.AddScoped<IEmployeeManagementService, EmployeeManagementService>();
 builder.Services.AddScoped<IPasswordsService, PasswordsService>();
 builder.Services.AddScoped<IPasswordHasher, Pbkdf2PasswordHasher>();
 builder.Services.AddScoped<IAsyncValidator<Employee>, EmployeeFieldsValidator>();
