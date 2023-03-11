@@ -7,7 +7,7 @@ package employees;
 import "custom_fields.proto";
 import "google/protobuf/timestamp.proto";
 
-message SetCustomFieldDto {
+message SetCustomFieldRequest {
   int32 field_id = 1;
   string value = 2;
 }
@@ -25,7 +25,7 @@ message SetUserStatus {
 }
 
 message CustomFields {
-  repeated SetCustomFieldDto fields = 1;
+  repeated SetCustomFieldRequest fields = 1;
 }
 
 message CreateEmployeeRequest {
@@ -38,7 +38,7 @@ message CreateEmployeeRequest {
   reserved 9, 10;
   string password = 11;
   reserved 12, 13, 14, 15;
-  repeated SetCustomFieldDto custom_fields = 16;
+  repeated SetCustomFieldRequest custom_fields = 16;
 }
 
 message UpdateEmployeeRequest{
@@ -57,6 +57,10 @@ message UpdateEmployeeRequest{
 message SetPasswordRequest {
   int32 user_id = 1;
   string password = 2;
+}
+
+message GetEmployeeRequest {
+  int32 employee_id = 1;
 }
 
 message EmployeeField {
@@ -87,6 +91,7 @@ message EmployeeResponse {
 message PasswordSetResponse { }
 
 service EmployeesService {
+  rpc GetEmployeeById(GetEmployeeRequest) returns (EmployeeResponse);
   rpc CreateEmployee(CreateEmployeeRequest) returns (EmployeeResponse);
   rpc UpdateEmployee(UpdateEmployeeRequest) returns (EmployeeResponse);
   rpc SetEmployeePassword(SetPasswordRequest) returns (PasswordSetResponse);
