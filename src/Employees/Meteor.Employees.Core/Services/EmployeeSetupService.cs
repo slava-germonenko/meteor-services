@@ -7,13 +7,13 @@ using Meteor.Employees.Core.Services.Abstractions;
 
 namespace Meteor.Employees.Core.Services;
 
-public class EmployeeSetupService
+public class EmployeeSetupService : IEmployeeSetupService
 {
     private readonly EmployeesContext _context;
 
     private readonly IPasswordsService _passwordsService;
     
-    private readonly IPublisher<EmployeeCreatedNotification> _newUserNotifier;
+    private readonly IPublisher<EmployeeNotification> _newUserNotifier;
 
     private readonly IEnumerable<IAsyncValidator<Employee>> _validators;
 
@@ -22,7 +22,7 @@ public class EmployeeSetupService
     public EmployeeSetupService(
         EmployeesContext context,
         IPasswordsService passwordsService,
-        IPublisher<EmployeeCreatedNotification> newUserNotifier,
+        IPublisher<EmployeeNotification> newUserNotifier,
         IEnumerable<IAsyncValidator<Employee>> validators,
         IMapper mapper
     )
@@ -42,7 +42,7 @@ public class EmployeeSetupService
         _context.Employees.Add(employee);
         await _context.SaveChangesAsync();
 
-        var newEmployeeNotification = _mapper.Map<EmployeeCreatedNotification>(employee);
+        var newEmployeeNotification = _mapper.Map<EmployeeNotification>(employee);
         _newUserNotifier.Publish(newEmployeeNotification);
 
         await _passwordsService.SetPasswordAsync(employee.Id, employeeDto.Password);

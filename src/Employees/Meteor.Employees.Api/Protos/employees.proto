@@ -5,6 +5,7 @@ option csharp_namespace = "Meteor.Employees.Api.Grpc";
 package employees;
 
 import "custom_fields.proto";
+import "google/protobuf/timestamp.proto";
 
 message SetCustomFieldDto {
   int32 field_id = 1;
@@ -16,6 +17,15 @@ enum EMPLOYEE_STATUS {
   EMPLOYEE_STATUS_INACTIVE = 1;
   EMPLOYEE_STATUS_TERMINATED = 2;
   EMPLOYEE_STATUS_ON_LEAVE = 3;
+}
+
+message SetUserStatus {
+  EMPLOYEE_STATUS status = 1;
+  string reason = 2;
+}
+
+message CustomFields {
+  repeated SetCustomFieldDto fields = 1;
 }
 
 message CreateEmployeeRequest {
@@ -31,6 +41,36 @@ message CreateEmployeeRequest {
   repeated SetCustomFieldDto custom_fields = 16;
 }
 
+message UpdateEmployeeRequest{
+  int32 id = 1;
+  optional string email_address = 2;
+  optional string phone_number = 3;
+  reserved 4, 5;
+  optional string first_name = 6;
+  optional string last_name = 7;
+  optional string middle_name = 8;
+  reserved 9, 10;
+  optional CustomFields custom_fields = 11;
+  optional SetUserStatus status = 12;
+}
+
+message SetPasswordRequest {
+  int32 user_id = 1;
+  string password = 2;
+}
+
+message EmployeeField {
+  custom_fields.CustomField field = 1;
+  string value = 2;
+}
+
+message EmployeeStatusChange {
+  EMPLOYEE_STATUS source_status = 1;
+  EMPLOYEE_STATUS target_status = 2;
+  google.protobuf.Timestamp change_date = 3;
+  string reason = 4;
+}
+
 message EmployeeResponse {
   int32 id = 1;
   string email_address = 2;
@@ -40,9 +80,14 @@ message EmployeeResponse {
   string last_name = 7;
   string middle_name = 8;
   EMPLOYEE_STATUS status = 9;
-  repeated custom_fields.CustomField custom_fields = 10;
+  repeated EmployeeField custom_fields = 10;
+  repeated EmployeeStatusChange status_changes = 11;
 }
+
+message PasswordSetResponse { }
 
 service EmployeesService {
   rpc CreateEmployee(CreateEmployeeRequest) returns (EmployeeResponse);
+  rpc UpdateEmployee(UpdateEmployeeRequest) returns (EmployeeResponse);
+  rpc SetEmployeePassword(SetPasswordRequest) returns (PasswordSetResponse);
 }

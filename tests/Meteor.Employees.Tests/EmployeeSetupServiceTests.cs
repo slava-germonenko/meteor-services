@@ -1,4 +1,5 @@
-﻿using Meteor.Common.Core.Exceptions;
+﻿using Mapster;
+using Meteor.Common.Core.Exceptions;
 using Meteor.Common.Core.Models;
 using Meteor.Common.Core.Services.Abstractions;
 using Meteor.Common.Messaging;
@@ -20,7 +21,7 @@ public class EmployeeSetupServiceTests
 
     private readonly Mock<IPasswordsService> _passwordsServiceMock;
 
-    private readonly Mock<IPublisher<EmployeeCreatedNotification>> _newEmployeePublisherMock;
+    private readonly Mock<IPublisher<EmployeeNotification>> _newEmployeePublisherMock;
 
     private readonly Mock<IAsyncValidator<Employee>> _employeeValidatorMock;
 
@@ -32,6 +33,9 @@ public class EmployeeSetupServiceTests
         optionsBuilder.UseInMemoryDatabase(nameof(EmployeeSetupServiceTests));
         _context = new EmployeesContext(optionsBuilder.Options);
 
+        var mapperConfig = new TypeAdapterConfig();
+        mapperConfig.Apply(new EmployeeMappingRegister());
+
         _passwordsServiceMock = new();
         _employeeValidatorMock = new();
         _newEmployeePublisherMock = new();
@@ -41,7 +45,7 @@ public class EmployeeSetupServiceTests
             _passwordsServiceMock.Object,
             _newEmployeePublisherMock.Object,
             new []{_employeeValidatorMock.Object},
-            new Mapper(EmployeeMapping.Configuration.Value)
+            new Mapper(mapperConfig)
         );
     }
 
@@ -66,7 +70,7 @@ public class EmployeeSetupServiceTests
 
         _newEmployeePublisherMock
             .Setup(p => p.Publish(
-                It.Is<EmployeeCreatedNotification>(
+                It.Is<EmployeeNotification>(
                     ecn => ecn.EmailAddress.Equals(employeeDto.EmailAddress)
                     && ecn.FirstName.Equals(employeeDto.FirstName)
                     && ecn.LastName.Equals(employeeDto.LastName)
