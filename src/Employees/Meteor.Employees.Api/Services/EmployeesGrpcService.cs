@@ -8,6 +8,8 @@ namespace Meteor.Employees.Api.Services;
 
 public class EmployeesGrpcService : EmployeesService.EmployeesServiceBase
 {
+    private readonly IEmployeesSearchService _employeesSearchService;
+
     private readonly IEmployeeSetupService _employeeSetupService;
 
     private readonly IEmployeeManagementService _employeeManagementService;
@@ -17,16 +19,27 @@ public class EmployeesGrpcService : EmployeesService.EmployeesServiceBase
     private readonly IMapper _mapper;
 
     public EmployeesGrpcService(
+        IEmployeesSearchService employeesSearchService,
         IEmployeeSetupService employeeSetupService,
         IEmployeeManagementService employeeManagementService,
         IPasswordsService passwordsService,
         IMapper mapper
     )
     {
+        _employeesSearchService = employeesSearchService;
         _employeeSetupService = employeeSetupService;
         _employeeManagementService = employeeManagementService;
         _passwordsService = passwordsService;
         _mapper = mapper;
+    }
+
+    public override async Task<EmployeeResponse> GetEmployeeById(
+        GetEmployeeRequest request,
+        ServerCallContext context
+    )
+    {
+        var employee = await _employeesSearchService.GetEmployeeAsync(request.EmployeeId);
+        return _mapper.Map<EmployeeResponse>(employee);
     }
 
     public override async Task<EmployeeResponse> CreateEmployee(

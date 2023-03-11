@@ -59,6 +59,7 @@ builder.Services.AddPublisher<PasswordUpdatedNotification>(options =>
         .GetRequiredValue<string>("Messaging:Exchanges:EmployeeChangedPassword:RoutingKey");
 });
 
+builder.Services.AddScoped<IEmployeesSearchService, EmployeesSearchService>();
 builder.Services.AddScoped<IEmployeeSetupService, EmployeeSetupService>();
 builder.Services.AddScoped<IEmployeeManagementService, EmployeeManagementService>();
 builder.Services.AddScoped<IPasswordsService, PasswordsService>();
